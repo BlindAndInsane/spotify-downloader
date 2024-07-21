@@ -1,5 +1,7 @@
 # Spotify Downloader
 
+Added a rate limit on request of @lemonbarfromlucida now the app only send 10 download req per min
+
 First make spotify app and get client id and client secret<br>
 then run aria2c (i made a simple shell script to run it)
 then start the app it will first download all songs in ur playlist and then watch for update if u add more songs it will download them
