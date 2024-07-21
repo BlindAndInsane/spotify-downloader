@@ -47,8 +47,13 @@ func NewDownloader(rpcEndpoint, downloadPath string) *Downloader {
 	go func() {
 		ticker := time.NewTicker(1 * time.Minute)
 		for range ticker.C {
+		tokenadder:
 			for i := 0; i < 10; i++ {
-				d.rateLimiter <- struct{}{}
+				select {
+				case d.rateLimiter <- struct{}{}:
+				default:
+					break tokenadder
+				}
 			}
 		}
 	}()
