@@ -15,6 +15,7 @@ type Downloader struct {
 	rpcEndpoint  string
 	downloadPath string
 	DownloadChan chan DownloadEvent
+	rateLimiter  chan struct{}
 }
 
 type DownloadEvent struct {
@@ -30,14 +31,35 @@ const (
 )
 
 func NewDownloader(rpcEndpoint, downloadPath string) *Downloader {
-	return &Downloader{
+	d := &Downloader{
 		rpcEndpoint:  rpcEndpoint,
 		downloadPath: downloadPath,
 		DownloadChan: make(chan DownloadEvent),
+		rateLimiter:  make(chan struct{}, 10), // buffer size 10 for rate limiting
 	}
+
+	// Fill the rateLimiter initially
+	for i := 0; i < 10; i++ {
+		d.rateLimiter <- struct{}{}
+	}
+
+	// Start a goroutine to refill the rateLimiter every minute
+	go func() {
+		ticker := time.NewTicker(1 * time.Minute)
+		for range ticker.C {
+			for i := 0; i < 10; i++ {
+				d.rateLimiter <- struct{}{}
+			}
+		}
+	}()
+
+	return d
 }
 
 func (d *Downloader) SubmitLink(ctx context.Context, link, downloadPath string) (string, error) {
+	// Acquire a token from the rate limiter
+	<-d.rateLimiter
+
 	// Dial Arigo
 	c, err := arigo.Dial(d.rpcEndpoint, "")
 	if err != nil {
@@ -72,7 +94,6 @@ func (d *Downloader) DownloadPlaylist(ctx context.Context, playlistName string, 
 				log.Printf("Download submitted for track %s", trackID)
 			}
 		}(trackID)
-		time.Sleep(1 * time.Second)
 	}
 	return nil
 }
