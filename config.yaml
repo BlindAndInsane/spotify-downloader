@@ -1,0 +1,18 @@
+# Spotify API credentials
+spotify_id: YOUR_SPOTIFY_CLIENT_ID
+spotify_secret: YOUR_SPOTIFY_CLIENT_SECRET
+
+# List of Spotify playlists to download
+playlists_to_download:
+  - YOUR_PLAYLIST_ID_1
+  - YOUR_PLAYLIST_ID_2
+  # Add more playlist IDs as needed
+
+# Aria2 RPC endpoint url (by default its the one given below)
+aria2_rpc_endpoint: ws://localhost:6800/jsonrpc
+
+# Directory path where downloaded songs and playlists will be saved
+download_path: ./downloads
+
+# Time interval for checking Spotify playlists for new songs
+interval: 1m
