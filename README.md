@@ -15,6 +15,8 @@ I dont have much time so dont extpect anything
 
 things are hard coded, idk what to do I am lazy.
 
+
+Also this is for educational and research purpose i dont take any responsiblity.
 <hr>
 
 BlindAndInsane
