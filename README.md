@@ -1,8 +1,7 @@
-# Spotify Downloader
-
 # Dont use this now
 Lucida.to already have full playlist download support (u can just write a simple script to sync ur playlist now)
 
+# Spotify Downloader
 Added a rate limit on request of @lemonbarfromlucida now the app only send 10 download req per min
 
 First make spotify app and get client id and client secret<br>
